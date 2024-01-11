@@ -1,19 +1,10 @@
 "use client";
 
-import React, { useState } from 'react'
-
-export default function VideoMetadataForm({videoTitleVal, startDateTimeVal, locationVal, onFormSubmit, setStepNumber}: {
-    videoTitleVal: string, startDateTimeVal: string, locationVal:string, onFormSubmit: Function, setStepNumber: Function} ) {
-    const [videoTitle, setVideoTitle] = useState<string>(videoTitleVal ?? "");
-    const [startDateTime, setStartDateTime] = useState<string>(startDateTimeVal ?? "");
-    const [location, setLocation] = useState<string>(locationVal ?? "");
-
-    const handleSubmit = (event: React.FormEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        onFormSubmit(videoTitle, startDateTime, location);
-        setStepNumber(2);
-    }
-
+export default function VideoMetadataForm({videoTitle, startDateTime, location,
+    setVideoTitle, setStartDateTime, setLocation, handleFormSubmit}: {
+    videoTitle: string, startDateTime: string, location:string, handleFormSubmit: Function,
+    setVideoTitle: Function, setStartDateTime: Function, setLocation: Function
+} ) {
     return (
         <form>
             <div className="form-row">
@@ -36,7 +27,7 @@ export default function VideoMetadataForm({videoTitleVal, startDateTimeVal, loca
                 </div>
                 <div className="form-group row">
                     <div className="col-sm-10">
-                        <button onClick={handleSubmit} className="btn btn-primary">Next</button>
+                        <button onClick={e => {e.preventDefault(); handleFormSubmit()}} className="btn btn-primary">Next</button>
                     </div>
                 </div>
             </div>

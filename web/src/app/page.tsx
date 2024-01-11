@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import axios from "axios";
 
 import UploadBoxPage from "./components/upload-box-page";
 import VideoMetadataFormPage from "./components/video-meta-page";
@@ -18,52 +19,84 @@ export default function Page() {
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [uploadStatus, setUploadStatus] = useState<string>("pending");
 
-    const onVideoMetadataFormSubmit = (videoTitle:string, startDateTime:string, location:string) => {
-        setVideoTitle(videoTitle);
-        setStartDateTime(startDateTime);
-        setLocation(location);
+    const onVideoMetadataFormSubmit = () => {
+        setStepNumber(2);
+    }
 
+    const handleUploadSubmit = () => {
         uploadFile();
+        setStepNumber(3);
     }
 
     async function uploadFile() {
-        const request = new XMLHttpRequest();
-        request.open("POST", "http://localhost:5000/api/upload");
-        request.upload.addEventListener("progress", (event) => {
-            if (event.lengthComputable) {
-                const percentComplete = event.loaded / event.total;
-                setUploadProgress(Math.round(percentComplete * 100));
-                console.log('upload progress: ', uploadProgress, '%');
+        if (fileData === null) {
+            setUploadStatus("failure");
+            return;
+        }
+
+        const config = {
+            onUploadProgress: (progressEvent: any) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setUploadProgress(percentCompleted);
+            },
+            headers: {
+                "Content-Type": "multipart/form-data"
             }
+        }
+
+        const formData = new FormData();
+
+        formData.set("file", fileData);
+        formData.set("title", videoTitle);
+        formData.set("startDateTime", startDateTime);
+        formData.set("location", location);
+
+        axios.post("http://localhost:3001/upload", formData, config
+        ).then((response) => {
+            console.log(response);
+            setUploadStatus("success");
+        }).catch((error) => {
+            console.log(error);
+            setUploadStatus("failure");
         });
-        request.addEventListener("load", (event) => {
-            console.log('upload complete');
-            if (request.status === 200) {
-                setUploadStatus("success");
-            } else {
-                setUploadStatus("failure");
-            }
-        });
-        request.send(fileData)
     }
 
+    const resetState = () => {
+        setSelectedFileData(null);
+        setVideoTitle("");
+        setStartDateTime("");
+        setLocation("");
+        setUploadProgress(0);
+        setUploadStatus("pending");
+        setStepNumber(0);
+    }
 
     return (
         <>
             <p> Upload your video </p>
             {stepNumber === 0 && (<UploadBoxPage
-                onSubmit={(fileData: File) => setSelectedFileData(fileData)}
-                setStepNumber={setStepNumber}/>)}
+                handleNext={(fileData: File) => {
+                    setSelectedFileData(fileData);
+                    setStepNumber(1);
+                }}/>)}
             {stepNumber === 1 && (<VideoMetadataFormPage
-                videoTitleVal={videoTitle}
-                startDateTimeVal={startDateTime}
-                locationVal={location}
-                onFormSubmit={onVideoMetadataFormSubmit} setStepNumber={setStepNumber}/>)}
-            {stepNumber === 2 && (<TermsAndConditionsPage setStepNumber={setStepNumber}/>)}
+                videoTitle={videoTitle}
+                startDateTime={startDateTime}
+                location={location}
+                setVideoTitle={setVideoTitle}
+                setStartDateTime={setStartDateTime}
+                setLocation={setLocation}
+                handleFormSubmit={onVideoMetadataFormSubmit}
+                />)}
+            {stepNumber === 2 && (<TermsAndConditionsPage
+                handleFileUpload={handleUploadSubmit}
+                handleBack={() => setStepNumber(1)}/>)}
             {stepNumber === 3 && (<UploadProgressPage
                 uploadProgress={uploadProgress}
                 uploadStatus={uploadStatus}
-                setStepNumber={setStepNumber}/>)}
+                handleDone={() => {
+                    resetState();
+                }}/>)}
         </>
     )
 }

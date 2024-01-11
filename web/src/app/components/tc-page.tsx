@@ -1,4 +1,4 @@
-export default function TermsAndConditionsPage({setStepNumber}: {setStepNumber: Function}) {
+export default function TermsAndConditionsPage({handleBack, handleFileUpload}: {handleBack: Function, handleFileUpload: Function}) {
     return <>
         <p> Terms and Conditions </p>
         <p>
@@ -27,7 +27,7 @@ export default function TermsAndConditionsPage({setStepNumber}: {setStepNumber: 
             6. EXCLUSIONS AND LIMITATIONS
             SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF CERTAIN WARRANTIES OR THE LIMITATION OR EXCLUSION OF LIABILITY FOR INCIDENTAL OR CONSEQUENTIAL DAMAGES. ACCORDINGLY, OUR LIABILITY IN SUCH JURISDICTION SHALL BE LIMITED TO THE MAXIMUM EXTENT PERMITTED BY LAW.
         </p>
-        <button onClick={() => setStepNumber(1)} className="btn btn-primary">Back</button>
-        <button onClick={() => setStepNumber(3)} className="btn btn-primary">Upload</button>
+        <button onClick={() => handleBack()} className="btn btn-primary">Back</button>
+        <button onClick={() => handleFileUpload()} className="btn btn-primary">Upload</button>
     </>
 }
