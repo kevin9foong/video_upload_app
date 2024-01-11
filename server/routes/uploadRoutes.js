@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const path = require('path');
 
 const router = express.Router();
 
@@ -8,7 +9,8 @@ const storage = multer.diskStorage({
         cb(null, 'videos');
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname);
+        // handles duplicates by appending a timestamp
+        cb(null, file.originalname.split('.')[0] + '-' + Date.now() + path.extname(file.originalname));
     }
 });
 

@@ -1,16 +1,25 @@
 const Video = require('../models/Video');
 
 exports.postAddVideo = (req, res, _next) => {
-    console.log(req.body);
-
     const title = req.body.title;
     const startDateTime = req.body.startDateTime;
     const location = req.body.location;
     const destination = req.file.destination;
     const videoSize = req.file.size;
-    const filename = req.file.originalname;
+    const filename = req.file.filename;
 
-    // TODO: perform input validation and error handling
+    // validate the metadata fields
+    // check if startDateTime is a valid date time
+    if (!title) {
+        return res.status(400).json({
+            message: 'Invalid metadata: title is missing.'
+        });
+    } else if (!startDateTime || isNaN(Date.parse(startDateTime))) {
+        return res.status(400).json({
+            message: 'Invalid metadata: startDateTime is missing or has incorrect format.'
+        });
+    }
+
     return Video.create({
         title: title,
         startDateTime: startDateTime,
@@ -20,12 +29,12 @@ exports.postAddVideo = (req, res, _next) => {
         originalName: filename
     }).then(result => {
         res.status(201).json({
-            message: 'Video created successfully!',
+            message: 'Video uploaded successfully!',
             video: result
         });
     }).catch(err => {
         res.status(500).json({
-            message: 'Failed to create video!',
+            message: 'Failed to upload video!',
             error: err
         });
         console.log(err);
