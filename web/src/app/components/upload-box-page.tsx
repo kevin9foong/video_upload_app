@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from 'next/image';
 
 export default function UploadBox({imgSrc, setImgSrc, file, setFile, handleNext}: {
@@ -48,7 +49,7 @@ export default function UploadBox({imgSrc, setImgSrc, file, setFile, handleNext}
                     <input className="form-control"
                         type="file"
                         accept="video/*"
-                        onClick={() => console.log("clicked")} onChange={handleFileChange} />
+                        onChange={handleFileChange} />
                 </div>
                 <p style={{margin: 5}}>
                     <span style={{fontWeight: "bold"}}>Selected file</span>: {file?.name}</p>

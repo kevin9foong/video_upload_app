@@ -1,5 +1,9 @@
 "use client";
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import dayjs from 'dayjs';
 import React, { useState, useEffect } from "react";
 
 export default function VideoMetadataForm({videoTitle, startDateTime, location,
@@ -21,7 +25,7 @@ export default function VideoMetadataForm({videoTitle, startDateTime, location,
     const validateStartDateTime = (startDateTime: string): string | null => {
         if (!startDateTime || startDateTime.length <= 0) {
             return "Start date time cannot be empty";
-        } else if (!Date.parse(startDateTime) || isNaN(Date.parse(startDateTime))) {
+        } else if (!dayjs(startDateTime).isValid()) {
             return "Start date time must be a valid date time";
         } else {
             return null;
@@ -40,16 +44,22 @@ export default function VideoMetadataForm({videoTitle, startDateTime, location,
                 <input id="videoTitle" type="text" className="form-control" value={videoTitle}
                 placeholder="Video title" onChange={event => setVideoTitle(event.target.value)}/>
                 <div className="text-danger">
-                    {videoTitleValidationMessage ?? <label className="text-danger">{videoTitleValidationMessage}</label>}
+                    {videoTitleValidationMessage ?? <small>{videoTitleValidationMessage}</small>}
                 </div>
             </div>
             <div className="form-row">
                 <div className="form-group" style={{margin: 3}}>
                     <label htmlFor="startDateTime" style={{fontWeight: 500}}>Video Start Date Time</label>
-                    <input id="startDateTime" type="text" className="form-control" value={startDateTime}
-                    placeholder="Video start date time" onChange={event => setStartDateTime(event.target.value)}/>
+                    <div id="startDateTime" style={{backgroundColor: "white", borderRadius: 4}}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateTimePicker
+                                className='form-control'
+                                value={startDateTime}
+                                onChange={val => setStartDateTime(val)} />
+                        </LocalizationProvider>
+                    </div>
                     <div className="text-danger">
-                    {startDateTimeValidationMessage ?? <label style={{backgroundColor: "red", color: "red"}}>{startDateTimeValidationMessage}</label>}
+                        {startDateTimeValidationMessage ?? <small>{startDateTimeValidationMessage}</small>}
                     </div>
                 </div>
                 <div className="form-group" style={{margin: 3}}>
