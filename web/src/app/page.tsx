@@ -12,6 +12,7 @@ export default function Page() {
     const [stepNumber, setStepNumber] = useState<0|1|2|3>(0);
 
     const [file, setFile] = useState<File | null>(null);
+    const [imgSrc, setImgSrc] = useState<string | null>(null);
     const [videoTitle, setVideoTitle] = useState<string>("");
     const [startDateTime, setStartDateTime] = useState<string>("");
     const [location, setLocation] = useState<string>("");
@@ -72,6 +73,7 @@ export default function Page() {
         setUploadStatus("pending");
         setStepNumber(0);
         setIsCheckboxChecked(false);
+        setImgSrc(null);
     }
 
     return (
@@ -87,6 +89,8 @@ export default function Page() {
                 <p className="text-center"
                     style={{fontWeight: "bolder"}}> Upload your video </p>
                 {stepNumber === 0 && (<UploadBoxPage
+                    imgSrc={imgSrc}
+                    setImgSrc={setImgSrc}
                     file={file}
                     setFile={setFile}
                     handleNext={() => {
