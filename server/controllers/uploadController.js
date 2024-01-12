@@ -29,12 +29,12 @@ exports.postAddVideo = (req, res, _next) => {
         originalName: filename
     }).then(result => {
         res.status(201).json({
-            message: 'Video uploaded successfully!',
+            message: 'Video uploaded successfully.',
             video: result
         });
     }).catch(err => {
         res.status(500).json({
-            message: 'Failed to upload video!',
+            message: 'Failed to upload video.',
             error: err
         });
         console.log(err);
