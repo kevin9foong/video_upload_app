@@ -1,10 +1,21 @@
-export default function TermsAndConditionsPage({handleBack, handleFileUpload}: {handleBack: Function, handleFileUpload: Function}) {
+"use client";
+import React, { useState } from "react"
+
+export default function TermsAndConditionsPage({isCheckboxChecked, setIsCheckboxChecked, handleBack, handleFileUpload}: {
+    isCheckboxChecked: boolean, setIsCheckboxChecked: Function,
+    handleBack: Function, handleFileUpload: Function}) {
+
     return <>
-        <p> Terms and Conditions </p>
+        <p style={{textDecoration: "underline"}}> Terms and Conditions </p>
         <p>
             The terms and conditions are that there are no terms and conditions. Please enjoy using the app.
         </p>
+        <div className="form-check">
+            <input checked={isCheckboxChecked} onChange={() => setIsCheckboxChecked(!isCheckboxChecked)}
+                id="checkbox" className="form-check-input" type="checkbox" aria-label="Checkbox to agree to terms and conditions"/>
+            <label className="form-check-label" htmlFor="checkbox">I agree to the terms and conditions</label>
+        </div>
         <button onClick={() => handleBack()} className="btn btn-primary">Back</button>
-        <button onClick={() => handleFileUpload()} className="btn btn-primary">Upload</button>
+        <button disabled={!isCheckboxChecked} onClick={() => {if (isCheckboxChecked) {handleFileUpload()}}} className="btn btn-primary">Upload</button>
     </>
 }

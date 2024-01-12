@@ -11,13 +11,15 @@ import UploadProgressPage from "./components/upload-progress-page";
 export default function Page() {
     const [stepNumber, setStepNumber] = useState<0|1|2|3>(0);
 
-    const [fileData, setSelectedFileData] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(null);
     const [videoTitle, setVideoTitle] = useState<string>("");
     const [startDateTime, setStartDateTime] = useState<string>("");
     const [location, setLocation] = useState<string>("");
 
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [uploadStatus, setUploadStatus] = useState<string>("pending");
+
+    const [isCheckboxChecked, setIsCheckboxChecked] = useState<boolean>(false);
 
     const onVideoMetadataFormSubmit = () => {
         setStepNumber(2);
@@ -29,7 +31,7 @@ export default function Page() {
     }
 
     async function uploadFile() {
-        if (fileData === null) {
+        if (file === null) {
             setUploadStatus("failure");
             return;
         }
@@ -46,7 +48,7 @@ export default function Page() {
 
         const formData = new FormData();
 
-        formData.set("file", fileData);
+        formData.set("file", file);
         formData.set("title", videoTitle);
         formData.set("startDateTime", startDateTime);
         formData.set("location", location);
@@ -62,41 +64,56 @@ export default function Page() {
     }
 
     const resetState = () => {
-        setSelectedFileData(null);
+        setFile(null);
         setVideoTitle("");
         setStartDateTime("");
         setLocation("");
         setUploadProgress(0);
         setUploadStatus("pending");
         setStepNumber(0);
+        setIsCheckboxChecked(false);
     }
 
     return (
-        <>
-            <p> Upload your video </p>
-            {stepNumber === 0 && (<UploadBoxPage
-                handleNext={(fileData: File) => {
-                    setSelectedFileData(fileData);
-                    setStepNumber(1);
-                }}/>)}
-            {stepNumber === 1 && (<VideoMetadataFormPage
-                videoTitle={videoTitle}
-                startDateTime={startDateTime}
-                location={location}
-                setVideoTitle={setVideoTitle}
-                setStartDateTime={setStartDateTime}
-                setLocation={setLocation}
-                handleFormSubmit={onVideoMetadataFormSubmit}
-                />)}
-            {stepNumber === 2 && (<TermsAndConditionsPage
-                handleFileUpload={handleUploadSubmit}
-                handleBack={() => setStepNumber(1)}/>)}
-            {stepNumber === 3 && (<UploadProgressPage
-                uploadProgress={uploadProgress}
-                uploadStatus={uploadStatus}
-                handleDone={() => {
-                    resetState();
-                }}/>)}
-        </>
+        <div className="d-flex justify-content-center align-">
+            <div className=""
+                style={{
+                marginBottom: "10%",
+                borderRadius: "20px",
+                width: "50%",
+                height: "50%",
+                backgroundColor: "rgba(132, 163, 227, 0.5)",
+                padding: "10%"}}>
+                <p className="text-center"
+                    style={{fontWeight: "bolder"}}> Upload your video </p>
+                {stepNumber === 0 && (<UploadBoxPage
+                    file={file}
+                    setFile={setFile}
+                    handleNext={() => {
+                        setStepNumber(1);
+                    }}/>)}
+                {stepNumber === 1 && (<VideoMetadataFormPage
+                    videoTitle={videoTitle}
+                    startDateTime={startDateTime}
+                    location={location}
+                    setVideoTitle={setVideoTitle}
+                    setStartDateTime={setStartDateTime}
+                    setLocation={setLocation}
+                    handleFormSubmit={onVideoMetadataFormSubmit}
+                    handleBack={() => setStepNumber(0)}
+                    />)}
+                {stepNumber === 2 && (<TermsAndConditionsPage
+                    isCheckboxChecked={isCheckboxChecked}
+                    setIsCheckboxChecked={setIsCheckboxChecked}
+                    handleFileUpload={handleUploadSubmit}
+                    handleBack={() => setStepNumber(1)}/>)}
+                {stepNumber === 3 && (<UploadProgressPage
+                    uploadProgress={uploadProgress}
+                    uploadStatus={uploadStatus}
+                    handleDone={() => {
+                        resetState();
+                    }}/>)}
+            </div>
+        </div>
     )
 }
