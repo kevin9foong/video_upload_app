@@ -1,0 +1,46 @@
+
+version: '3.8'
+services:
+  web:
+    build: ./web
+    ports:
+      - "3000:3000"
+  server:
+    build: ./server
+    ports:
+      - "3001:3001"
+
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    environment:
+      - POSTGRES_DB_HOST=postgresql
+      - POSTGRES_DB_PORT=5432
+      - POSTGRES_DB_NAME=postgres
+      - POSTGRES_USER_NAME=postgres
+      - POSTGRES_USER_PASSWORD_FILE=/run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - ./server/videos:/app/videos
+  postgresql:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_DB=postgres
+    secrets:
+      - postgres_password
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+
+secrets:
+  postgres_password:
+    file: ./secrets/db_password.txt
+
+
+
+
+
