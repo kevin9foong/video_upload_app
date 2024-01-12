@@ -3,12 +3,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import React, { useState, useEffect } from "react";
 
 export default function VideoMetadataForm({videoTitle, startDateTime, location,
     setVideoTitle, setStartDateTime, setLocation, handleFormSubmit, handleBack}: {
-    videoTitle: string, startDateTime: string, location:string, handleFormSubmit: Function, handleBack: Function
+    videoTitle: string, startDateTime: Dayjs | null, location:string, handleFormSubmit: Function, handleBack: Function
     setVideoTitle: Function, setStartDateTime: Function, setLocation: Function
 } ) {
     const [videoTitleValidationMessage, setVideoTitleValidationMessage] = useState<string | null>(null);
@@ -22,8 +22,8 @@ export default function VideoMetadataForm({videoTitle, startDateTime, location,
         }
     }
 
-    const validateStartDateTime = (startDateTime: string): string | null => {
-        if (!startDateTime || startDateTime.length <= 0) {
+    const validateStartDateTime = (startDateTime: Dayjs | null): string | null => {
+        if (!startDateTime) {
             return "Start date time cannot be empty";
         } else if (!dayjs(startDateTime).isValid()) {
             return "Start date time must be a valid date time";

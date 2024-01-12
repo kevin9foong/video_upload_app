@@ -12,7 +12,8 @@ export default function UploadProgress({handleDone, uploadProgress, uploadStatus
             </div>
             <div className="d-flex flex-column align-items-center" style={{marginBottom: 10}}>
                 <div>
-                    <span><span style={{fontWeight: 500}}>Upload progress:</span>{`${uploadProgress}%`}</span>
+                    <span style={{fontWeight: 500}}>Upload progress:</span>
+                    {uploadProgress}%
                 </div>
                 <div>
                     <span><span style={{fontWeight: 500}}>Upload status:</span>{uploadStatus}</span>

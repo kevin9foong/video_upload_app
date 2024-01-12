@@ -7,7 +7,7 @@ import UploadBoxPage from "./components/upload-box-page";
 import VideoMetadataFormPage from "./components/video-meta-page";
 import TermsAndConditionsPage from "./components/tc-page";
 import UploadProgressPage from "./components/upload-progress-page";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 export default function Page() {
     const [stepNumber, setStepNumber] = useState<0|1|2|3>(0);
@@ -52,7 +52,7 @@ export default function Page() {
 
         formData.set("file", file);
         formData.set("title", videoTitle);
-        formData.set("startDateTime", startDateTime);
+        formData.set("startDateTime", dayjs(startDateTime).format());
         formData.set("location", location);
 
         axios.post("http://localhost:3001/upload", formData, config
@@ -68,7 +68,7 @@ export default function Page() {
     const resetState = () => {
         setFile(null);
         setVideoTitle("");
-        setStartDateTime("");
+        setStartDateTime(null);
         setLocation("");
         setUploadProgress(0);
         setUploadStatus("pending");
