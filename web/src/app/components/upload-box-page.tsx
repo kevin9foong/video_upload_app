@@ -12,7 +12,7 @@ export default function UploadBox({file, setFile, handleNext}: {file: File | nul
         <>
             <input type="file" accept="video/*" onClick={() => console.log("clicked")} onChange={handleFileChange} />
             <p><text style={{fontWeight: "bold"}}>Selected file</text>: {file?.name}</p>
-            <button onClick={() => handleNext()} className="btn btn-primary">Next</button>
+            <button disabled={!file} onClick={() => handleNext()} className="btn btn-primary">Next</button>
         </>
     )
 }
