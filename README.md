@@ -5,6 +5,9 @@
 1. Create a file named `db_password.txt` in the /secrets folder.
 This is used to define the postgreSQL account password.
 
+Since we are spinning up our own postgreSQL database using Docker, we can define a password for the user account created.
+The value of this txt file can be any password we want eg, 'password'.
+
 2. To start the frontend, backend and database(postgreSQL) services (recommended).
 ```
 docker compose up

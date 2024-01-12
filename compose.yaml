@@ -5,11 +5,13 @@ services:
     build: ./web
     ports:
       - "3000:3000"
+    volumes:
+      - ./web/src:/app/src
+      - ./web/public:/app/public
   server:
     build: ./server
     ports:
       - "3001:3001"
-
     depends_on:
       postgresql:
         condition: service_healthy
