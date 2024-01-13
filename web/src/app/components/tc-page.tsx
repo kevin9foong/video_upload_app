@@ -16,7 +16,7 @@ export default function TermsAndConditionsPage({isCheckboxChecked, setIsCheckbox
             <label className="form-check-label" htmlFor="checkbox">I agree to the terms and conditions</label>
         </div>
         <div className="d-flex justify-content-between" style={{margin: 5, marginTop: 10}}>
-            <button onClick={() => handleBack()} className="btn btn-primary">Back</button>
+            <button onClick={() => handleBack()} className="btn btn-secondary">Back</button>
             <button disabled={!isCheckboxChecked} onClick={() => {if (isCheckboxChecked) {handleFileUpload()}}} className="btn btn-primary">Upload</button>
         </div>
     </>

@@ -27,16 +27,17 @@ pgcli -h localhost -p 5432 -u postgres
 ```
 
 The uploaded videos are stored in /server/videos.
+Database records are stored in a table named 'videos'.
 
 ## Wireframes:
 To build this project, I have created some low-fidelity wireframes to get a general idea of how the user would interact with the form. These wireframes are stored in the /assets folder.
 
 ## Demo screens:
-![Home screen](/assets/screens/image.png)
-![Upload thumbnail screen](/assets/screens/image-1.png)
-![Validation in frontend](/assets/screens/image-2.png)
-![Terms and conditions](/assets/screens/image-3.png)
-![Upload bar](/assets/screens/image-4.png)
+![Home screen](/assets/screens/image-1.png)
+![Upload thumbnail screen](/assets/screens/image-2.png)
+![Validation in frontend](/assets/screens/image-3.png)
+![Terms and conditions](/assets/screens/image-4.png)
+![Upload bar](/assets/screens/image-5.png)
 
 ## Additional notes:
 1. Handling duplicate file uploads. There is a date.now() appended to the uploaded file in the file system.
