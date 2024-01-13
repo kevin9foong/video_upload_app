@@ -1,3 +1,4 @@
+const dayjs = require('dayjs');
 const Video = require('../models/Video');
 
 exports.postAddVideo = (req, res, _next) => {
@@ -14,7 +15,7 @@ exports.postAddVideo = (req, res, _next) => {
         return res.status(400).json({
             message: 'Invalid metadata: title is missing.'
         });
-    } else if (!startDateTime || isNaN(Date.parse(startDateTime))) {
+    } else if (!startDateTime || !dayjs(startDateTime).isValid()) {
         return res.status(400).json({
             message: 'Invalid metadata: startDateTime is missing or has incorrect format.'
         });
