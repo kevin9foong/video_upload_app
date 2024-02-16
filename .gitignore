@@ -130,3 +130,8 @@ dist
 .pnp.*
 
 secrets/*
+
+**/.DS_Store
+
+**/terraform.tfstate
+**/.*
