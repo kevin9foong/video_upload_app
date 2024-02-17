@@ -1,60 +1,51 @@
 terraform {
   required_providers {
-    # google = {
-    #   source = "hashicorp/google"
-    #   version = "4.51.0"
-    # }
+    google = {
+      source  = "hashicorp/google"
+      version = "4.51.0"
+    }
     docker = {
       source  = "kreuzwerker/docker"
       version = "3.0.2"
     }
   }
 }
+provider "google" {
+  credentials = file(var.service_account_json_path)
 
-# provider "google" {
-#   credentials = file("<NAME>.json")
-
-#   project = "<PROJECT_ID>"
-#   region  = "us-central1"
-#   zone    = "us-central1-c"
-# }
-
-provider "docker" {
-  host = "unix:///var/run/docker.sock"
+  project = "video-upload-app-414612"
+  region  = "us-central1"
+  zone    = "us-central1-c"
 }
 
-# # Create new storage bucket in the US multi-region
-# resource "random_id" "bucket_prefix" {
-#   byte_length = 8
+# data "google_service_account" "registry_pusher" {
+#   account_id = "terraform"
 # }
 
-# # To store the uploaded videos
-# resource "google_storage_bucket" "videos_bucket" {
-#   name          = "${random_id.bucket_prefix.hex}-videos-bucket"
-#   location      = "US"
-#   storage_class = "STANDARD"
-#   force_destroy = true
-#   uniform_bucket_level_access = true
+# resource "google_service_account_key" "registry_pusher_key" {
+#   service_account_id = data.google_service_account.registry_pusher.name
+
+#   depends_on = [data.google_service_account.registry_pusher]
 # }
 
-# resource "docker_registry_image" "server_image" {
-#   name          = docker_image.server_image.name
+# data "google_service_account_key" "registry_pusher_key" {
+#   name            = google_service_account_key.registry_pusher_key.name
+#   public_key_type = "TYPE_X509_PEM_FILE"
+
+#   depends_on = [google_service_account_key.registry_pusher_key]
 # }
 
-resource "docker_image" "server_image" {
-  name = "gcr.io/videos/server:1.0"
-  build {
-    context = "../server"
-  }
-}
+# provider "docker" {
+#   host = "unix:///var/run/docker.sock"
 
-# resource "docker_registry_image" "client_image" {
-#   name          = docker_image.client_image.name
+#   registry_auth {
+#     address  = "gcr.io"
+#     username = data.google_service_account.registry_pusher.email
+#     password = data.google_service_account_key.registry_pusher_key.public_key
+#   }
 # }
 
-resource "docker_image" "client_image" {
-  name = "gcr.io/videos/web:1.0"
-  build {
-    context = "../web"
-  }
-}
+# Return service URL
+# output "url" {
+#   value = google_cloud_run_service.default.status[0].url
+# }

@@ -133,5 +133,8 @@ secrets/*
 
 **/.DS_Store
 
-**/terraform.tfstate
-**/.*
+# Avoid committing tf state and secrets
+**/*.tfstate
+**/*.tfstate.*
+infra/*.json
+infra/*.*
